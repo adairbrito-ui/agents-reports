@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents VP JRMA | Toqan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ifood-red: #EA1D2C;
+            --ifood-dark: #2B2B2B;
+            --ifood-gray: #666666;
+            --ifood-light-gray: #E5E5E5;
+            --ifood-bg-gray: #F5F5F5;
+            --ifood-white: #FFFFFF;
+            --ifood-green: #00A86B;
+            --ifood-orange: #FFB100;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--ifood-dark);
+            background-color: var(--ifood-white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--ifood-red), #C51628);
+            color: var(--ifood-white);
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--ifood-white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--ifood-red);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(234,29,44,0.2);
+            transform: translateY(-3px);
+        }
+
+        .card h3 {
+            color: var(--ifood-red);
+            font-size: 0.95em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--ifood-dark);
+        }
+
+        .section {
+            background: var(--ifood-bg-gray);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .section h2 {
+            color: var(--ifood-gray);
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--ifood-light-gray);
+            padding-bottom: 10px;
+        }
+
+        .tabela-section {
+            padding: 25px;
+            background: var(--ifood-white);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tabela-section h3 {
+            color: var(--ifood-gray);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .tabela-container {
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+        
+        .tabela-pl {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--ifood-white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tabela-pl th,
+        .tabela-pl td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--ifood-light-gray);
+            font-size: 0.9em;
+        }
+        
+        .tabela-pl thead th {
+            background: var(--ifood-red);
+            color: var(--ifood-white);
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.85em;
+        }
+        
+        .tabela-pl tbody tr:hover {
+            background: rgba(234, 29, 44, 0.05);
+        }
+        
+        .tabela-pl .desc-col {
+            font-weight: 500;
+            color: var(--ifood-dark);
+        }
+        
+        .tabela-pl .valor-col {
+            text-align: center;
+            font-weight: 600;
+            color: var(--ifood-dark);
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background-color: var(--ifood-green);
+        }
+
+        .badge-warning {
+            background-color: var(--ifood-orange);
+        }
+
+        .badge-danger {
+            background-color: var(--ifood-red);
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 150px;
+            margin: 5px auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: var(--ifood-light-gray);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ifood-red), #C51628);
+            border-radius: 3px;
+            transition: width 0.8s ease-in-out;
+        }
+
+        .footer {
+            background: var(--ifood-dark);
+            color: var(--ifood-white);
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1024px) {
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .tabela-pl {
+                font-size: 0.8em;
+            }
+
+            .tabela-pl th,
+            .tabela-pl td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Agents VP JRMA | Toqan</h1>
+            <p>Relatório de Monitoramento de Adoção de Agentes IA</p>
+        </div>
+
+        <!-- Seção 1: Cartões de Resumo Executivo -->
+        <div class="summary-cards">
+            <div class="card">
+                <h3>Total de Agents</h3>
+                <div class="card-value">460</div>
+            </div>
+            
+            <div class="card">
+                <h3>Agents Ativos</h3>
+                <div class="card-value">178</div>
+            </div>
+
+            <div class="card">
+                <h3>Usuários com Agents</h3>
+                <div class="card-value">101</div>
+            </div>
+
+            <div class="card">
+                <h3>Usuários sem Agents</h3>
+                <div class="card-value">50</div>
+            </div>
+
+            <div class="card">
+                <h3>Taxa de Adoção</h3>
+                <div class="card-value">66.9%</div>
+            </div>
+        </div>
+
+        <!-- Seção 2: Tabela Detalhada por Liderança -->
+        <div class="section">
+            <h2>📊 Agents por Liderança</h2>
+            
+            <div class="tabela-section">
+                <div class="tabela-container">
+                    <table class="tabela-pl">
+                        <thead>
+                            <tr>
+                                <th>Liderança</th>
+                                <th>Quantidade de Agents Ativos</th>
+                                <th>Total de Agents</th>
+                                <th>Usuários com Agents</th>
+                                <th>Total de Usuários</th>
+                                <th>Adesão</th>
+                                <th>Progresso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="desc-col">Diego Barreto</td>
+                                <td class="valor-col">1</td>
+                                <td class="valor-col">4</td>
+                                <td class="valor-col">1</td>
+                                <td class="valor-col">1</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">100.0%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 100.0%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Camila Nagano</td>
+                                <td class="valor-col">25</td>
+                                <td class="valor-col">54</td>
+                                <td class="valor-col">10</td>
+                                <td class="valor-col">13</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">76.9%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 76.9%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Rodolfo Araujo</td>
+                                <td class="valor-col">42</td>
+                                <td class="valor-col">164</td>
+                                <td class="valor-col">39</td>
+                                <td class="valor-col">53</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">73.6%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 73.6%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Filipe Pacheco</td>
+                                <td class="valor-col">29</td>
+                                <td class="valor-col">69</td>
+                                <td class="valor-col">5</td>
+                                <td class="valor-col">7</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">71.4%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 71.4%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Thais Marotta</td>
+                                <td class="valor-col">46</td>
+                                <td class="valor-col">106</td>
+                                <td class="valor-col">23</td>
+                                <td class="valor-col">33</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">69.7%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 69.7%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">João Sabino</td>
+                                <td class="valor-col">24</td>
+                                <td class="valor-col">38</td>
+                                <td class="valor-col">10</td>
+                                <td class="valor-col">16</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">62.5%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 62.5%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Thiago Silva</td>
+                                <td class="valor-col">4</td>
+                                <td class="valor-col">11</td>
+                                <td class="valor-col">6</td>
+                                <td class="valor-col">11</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">54.5%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 54.5%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Barbara Luvizotto</td>
+                                <td class="valor-col">4</td>
+                                <td class="valor-col">6</td>
+                                <td class="valor-col">3</td>
+                                <td class="valor-col">6</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">50.0%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 50.0%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Lucas Pittioni</td>
+                                <td class="valor-col">2</td>
+                                <td class="valor-col">7</td>
+                                <td class="valor-col">3</td>
+                                <td class="valor-col">8</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-danger">37.5%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 37.5%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Felipe Crull</td>
+                                <td class="valor-col">1</td>
+                                <td class="valor-col">1</td>
+                                <td class="valor-col">1</td>
+                                <td class="valor-col">3</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-danger">33.3%</span>
+                                </td>
+                                <td class="valor-col">
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 33.3%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 3: Falta Agents -->
+        <div class="section">
+            <h2>❌ Falta Agents - por Liderança</h2>
+            
+            <div class="tabela-section">
+                <div class="tabela-container">
+                    <table class="tabela-pl">
+                        <thead>
+                            <tr>
+                                <th>Liderança</th>
+                                <th>Qtd Usuários sem Agent</th>
+                                <th>Adesão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="desc-col">Rodolfo Araujo</td>
+                                <td class="valor-col">14</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">73.6%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 73.6%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Thais Marotta</td>
+                                <td class="valor-col">10</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">69.7%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 69.7%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">João Sabino</td>
+                                <td class="valor-col">6</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">62.5%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 62.5%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Lucas Pittioni</td>
+                                <td class="valor-col">5</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-danger">37.5%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 37.5%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Thiago Silva</td>
+                                <td class="valor-col">5</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">54.5%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 54.5%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Barbara Luvizotto</td>
+                                <td class="valor-col">3</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-warning">50.0%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 50.0%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Camila Nagano</td>
+                                <td class="valor-col">3</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">76.9%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 76.9%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Felipe Crull</td>
+                                <td class="valor-col">2</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-danger">33.3%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 33.3%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Filipe Pacheco</td>
+                                <td class="valor-col">2</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">71.4%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 71.4%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="desc-col">Diego Barreto</td>
+                                <td class="valor-col">0</td>
+                                <td class="valor-col">
+                                    <span class="badge badge-success">100.0%</span>
+                                    <div class="progress-container" style="margin-top: 8px;">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 100.0%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            🤖 Agents VP Toqan | Relatório Automatizado<br>
+            Processado em 24 de Dezembro de 2024
+        </div>
+    </div>
+</body>
+</html>
